@@ -12,8 +12,8 @@ public class Server
 		try
 		{
 			server = new ServerSocket(port) ;
-			System.out.println("Server started") ;
-			System.out.println("Waiting for a client") ;
+			//System.out.println("Server started") ;
+			//System.out.println("Waiting for a client") ;
 			
 			socket = server.accept() ;
 			System.out.println("Client accepted") ;
