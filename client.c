@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-#include <stdio.h>
-
-int main(void)
-{
-	prinf("Hello" ;
-	return 0 ;
-=======
+#include <sys/types.h>
+#include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -15,43 +9,50 @@ int main(void)
 #include <string.h>
 #define PORT 8080
 
-int main(int argc, char const *argv[])
+int main()
 {
-	struct sockaddr_in address ;
-	int sock = 0, valread ;
-	struct sockaddr_in serv_addr ;
-	char *hello = "Ni hao ma" ;
-	char buffer[1024] = {0} ;
+	char buffer1[256], buffer2[256] ;
+	struct sockaddr_in my_addr, my_addr1 ;
+	int client = socket(AF_INET, SOCK_STREAM, 0) ;
 	
-	if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-	{
-		printf("\n Socket creation error \n") ;
-		return -1 ;
-	}
+	if (client < 0)
+		printf("Error in client creating\n") ;
 
-	memset(&serv_addr, '0', sizeof(serv_addr)) ;
+	else 
+		printf("Client Created\n") ;
 
-	serv_addr.sin_family = AF_INET ;
-	serv_addr.sin_port = htons(PORT) ;
+	my_addr.sin_family = AF_INET ;
+	my_addr.sin_addr.s_addr = INADDR_ANY ;
+	my_addr.sin_port = htons(12000) ;
 
-	if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0)
-	{
-		printf("\n Invalid address/ Address not supported \n") ;
-		return -1 ;
-	}
+	my_addr.sin_addr.s_addr = inet_addr("192.168.203.130") ;
 
-	if(connect(sock, (struct sockaddr *) &serv_addr, 
-sizeof(serv_addr)) < 0)
-	{
-		printf("\n Connection Failed \n") ;
-		return -1 ;
-	}
+	my_addr1.sin_family = AF_INET ;
+	my_addr1.sin_addr.s_addr = INADDR_ANY ;
+	my_addr.sin_port = htons(12010) ;
 
-	send(sock, hello, strlen(hello), 0) ;
-	printf("Hello message sent \n") ;
-	valread = read(sock, buffer, 1024) ;
-	printf("%s \n", buffer) ;
+	my_addr1.sin_addr.s_addr = inet_addr("192.168.203.130") ;
+
+	if(bind(client, (struct sockaddr*) &my_addr1, sizeof(struct 
+sockaddr_in)) == 0) 
+		printf("Binded Correctly\n") ;
+	else
+		printf("Unable to bind\n") ;
+
+	socklen_t addr_size = sizeof my_addr ;
+	int con = connect(client, (struct sockaddr*) &my_addr, sizeof 
+my_addr) ;
+
+	if(con == 0)
+		printf("Client Connected\n") ;
+
+	else
+		printf("Error in Connection\n") ;
+
+	strcpy(buffer2, "Ni hao ma") ;
+	send(client, buffer2, 256, 0) ;
+	recv(client, buffer1, 256, 0) ;
+	printf("Server : %s\n", buffer1) ;
 	return 0 ;
-
->>>>>>> 2c8c8d3c154f5be85faf0ffb9eeefc22d3898945
+	
 }
