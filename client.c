@@ -29,7 +29,7 @@ int main()
 
 	my_addr1.sin_family = AF_INET ;
 	my_addr1.sin_addr.s_addr = INADDR_ANY ;
-	my_addr.sin_port = htons(12010) ;
+	my_addr1.sin_port = htons(12010) ;
 
 	my_addr1.sin_addr.s_addr = inet_addr("192.168.203.130") ;
 
